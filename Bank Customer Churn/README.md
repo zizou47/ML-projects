@@ -31,7 +31,7 @@ Finally, we created a user-facing app using FastAPI and Streamlit. The app allow
 
 - **App Demonstration Video:**
   
-![App Demo](images/streamlit.webm)
+![App Demo](images/streamlit.gif)
 
 ## Running the Application
 
@@ -43,12 +43,16 @@ To run the application, follow these steps:
 
 2. Change directory to the project folder:
 
+    ```bash
     cd Bank_Customer_Churn
 
+   
 3. Start the FastAPI backend:
 
+    ```bash
     uvicorn main:app --reload
 
 4. Run the Streamlit app:
 
+    ```bash
     streamlit run streamlit_app.py
