@@ -1,0 +1,60 @@
+np.ones  to account the bias term (intercept)
+Y = X @ B  where B is coff        X@B is predected value
+B = (X.T @ X)^-1  @ X.T @ Y        X.T transpose to get matrix square
+B =  intecept (b0) *1 + b1 *x1 ... + bn * xn (slopes)
+
+
+example LR: 
+
+X = [[1,1], [1,4]]   ,  Y = [0,1]
+
+1* calculate Beta (we start from B = [0,0]), Learning Rate = 0.1 :
+
+- hypothesis function (linear part) = X @ B  = [0 *1 + 0*1, 0*1 + 0*4] = [0,0]
+- sigmoid function (for prediction)= 1/ (1 + exp(-(X @ B)))   =   [1 / 1 + exp(0), 1/ 1+ exp(0)] = [0.5, 0.5]
+-  loss function :  Loss = -Σ [y_i * log(P(Y=1 | X_i)) + (1-y_i) * log(1-P(Y=1 | X_i))]  = -[0 * log(0.5) + 1 * log(0.5)] * 2 = -log(0.5) * 2 ≈ 1.39
+- Optimization : calculate (Gradient Descent): ∂Loss/∂β = X.T @ (Y_pred - Y)
+y_ pred - y = [0.5, -0.5]  |  X.T = [[1,1], [1,4]]  | then:
+
+X.T @ (y_pred - y) = [0.5 + (-0.5), 1*0.5 + 4*(-0.5)] = [0, -1.5]
+
+- Update β : = β - (LR * GD)  
+         β =  [0,0] - ((0.1) * ([0, -1.5])) = [0, 0.15]
+
+Iteration 01 :
+Prediction: X @ B = [0.15 , 0.6]
+p(y = 1)  ≈ [0.54, 0.65]
+loss : ≈ 1.26
+Gradient :  X.T @ (Y_pred - Y)
+Y_pred - Y = [0.54, -0.35]
+X.T @ (Y_pred - Y) = [0.54 + (-0.35), 1*0.54 + 4*(-0.35)] ≈ [0.19, -0.86].
+Update β = [0, 0.15] - 0.1 * [0.19, -0.86] = [-0.02, 0.24]   until β = [-3, 1], where the loss is smallest (0.44)
+
+
+Overfitting is model fit well on train data but not on other data 
+
+regularization: Add L1 (Lasso) or L2 (Ridge) penalties to the loss (e.g., loss + λ * ||w||²), shrinking params to prevent over-reliance on specific features.
+Reduce Features: Use feature selection (e.g., RFE) or drop less important features.
+Increase Data: Collect more training data to generalize better.
+Cross-Validation: Use k-fold cross-validation to detect and adjust for overfitting.
+
+
+underfiting is model unable to fit well on training set 
+
+Add Features: Include more relevant features or polynomial terms (e.g., x²).
+Increase Complexity: Allow more iterations or a higher learning rate to better fit the data.
+Feature Engineering: Transform features (e.g., scaling, encoding) to capture patterns.
+Reduce Regularization: If using regularization, lower the penalty (λ) to let the model fit more.
+
+Bias/ Variance in ML :
+Bias/Variance as Terms: Yes, they describe model issues—high bias = underfitting, high variance = overfitting, not about data spread itself (that’s a misnomer for variance’s prediction spread).
+Visualize: Use the charts above to see bias (training error drop) and variance (train-test gap). In practice, assess with train/test performance, not direct calculation.
+
+- cross-validation splits the whole dataset (all features) into multiple 75%/25% train/test sets, tests the model each time, and averages the results
+
+* RIDGE : 
+Ridge adds a penalty (λ * β_j) to the loss function to prevent overfitting (reduce variance) by shrinking the model parameters (B slopes) 
+Ridge penalizes Σ (β_j²), so as λ increases, the magnitudes of β_j shrink Ridge regularization aims to shrink the slopes to reduce overfitting by limiting the influence of features
+* Lasso 
+feature selection is done in data cleaning, but Lasso is used to dynamically select features during training,
+ refining the model even after cleaning by setting some β_j to zero—useful when feature importance is uncertain or needs adjustment
